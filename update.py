@@ -1,12 +1,17 @@
-#from boxsdk import JWTAuth, Client
-#from boxsdk.network.default_network import DefaultNetwork
+from boxsdk import JWTAuth, Client
+from boxsdk.network.default_network import DefaultNetwork
 from socrata.authorization import Authorization
 import os
 import json
 import utils
 
-#box_auth = JWTAuth.from_settings_file('jwt_auth.json')
-#box_client = Client(box_auth)
+box_auth = JWTAuth.from_settings_file('jwt_auth.json')
+box_client = Client(box_auth)
+
+items = box_client.folder(folder_id='142985903440').get()
+
+for item in items:
+  
 
 domain = "hhs-odp-testing.demo.socrata.com"
 

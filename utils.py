@@ -38,7 +38,7 @@ def upload_state_report(dataset_id, state, domain, auth):
     import requests
     import os
     import json
-    from datetime import date
+    from datetime import date, timedelta
     import re
 
     meta_url = f"https://{domain}/api/views/metadata/v1/{dataset_id}"
@@ -49,7 +49,7 @@ def upload_state_report(dataset_id, state, domain, auth):
 
     revision = view.revisions.create_replace_revision()
 
-    current_date = date.today().strftime("%Y%m%d")
+    current_date = (date.today() - timedelta(4)).strftime("%Y%m%d")
 
     filepath = f'input/{state}_State_Profile_Report_{current_date}_Public.pdf' 
 

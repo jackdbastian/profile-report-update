@@ -1,0 +1,26 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# IDE files
+.idea
+
+#Log Files
+app.log
+
+# outputs
+out/
+
+# temporary files
+temp/
+
+# security
+boxConfig.txt
+jwt_auth.json
+
+# byte-compiled
+__pycache__/
+
+# installer logs
+pip-log.txt
+
+# misc
+**/.DS_Store

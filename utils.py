@@ -55,7 +55,6 @@ def upload_state_report(dataset_id, state, domain, auth):
 
     filename = f'{state}_State_Profile_Report_{current_date}_Public.pdf'
 
-    '''
     with open(filepath, 'rb') as file:
         upload = revision.source_as_blob(filename)
         source = upload.blob(file)
@@ -67,7 +66,7 @@ def upload_state_report(dataset_id, state, domain, auth):
     attachment_update = add_attachment(revision, filepath, filename) 
     job = attachment_update.apply()
     job.wait_for_finish(progress=lambda job: print(state, 'attachment upload: ', job.attributes['status']))   
-'''
+
     last_update =  (date.today() - timedelta(4)).strftime("%b %d, %Y")
     payload = {"customFields": {"Common Core": {"Last Update" : last_update}}}
     json_data = json.dumps(payload)

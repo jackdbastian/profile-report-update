@@ -20,5 +20,9 @@ socrata_auth = Authorization(
 with open('profile_reports_config.json') as f:
   profile_reports = json.load(f)
 
+
 for i in profile_reports:
-  utils.upload_state_report(i['id'], i['name'], domain, socrata_auth)
+  try:
+    utils.upload_state_report(i['id'], i['name'], domain, socrata_auth)
+  except:
+    pass

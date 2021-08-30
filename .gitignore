@@ -1,16 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# IDE files
-.idea
-
-#Log Files
-app.log
-
-# outputs
-out/
-
-# temporary files
-temp/
+# inputs
+input/
 
 # security
 boxConfig.txt

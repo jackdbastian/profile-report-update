@@ -4,14 +4,11 @@
 input/
 
 # security
-boxConfig.txt
 jwt_auth.json
+socrata_creds.json
 
 # byte-compiled
 __pycache__/
-
-# installer logs
-pip-log.txt
 
 # misc
 **/.DS_Store

@@ -11,8 +11,8 @@ import os
 # box_client = Client(box_auth)
 
 SOCRATA_ID = os.environ['SOCRATA_ID']
-SOCRATA_PASS = os.environ['SOCRATA_KEY']
-APP_TOKEN = os.environ['SOCRATA_APP_TOKEN']
+SOCRATA_PASS = os.environ['SOCRATA_PASS']
+APP_TOKEN = os.environ['APP_TOKEN']
 
 domain = "healthdata.gov"
 

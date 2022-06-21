@@ -2,6 +2,7 @@ from socrata.authorization import Authorization
 from socrata import Socrata
 from sodapy import Socrata as Soda
 import json
+import requests
 import utils
 import os
 # from boxsdk import JWTAuth, Client
@@ -33,9 +34,16 @@ sodapy_client = Soda(
 
 with open('profile_reports_config.json') as f:
   profile_reports = json.load(f)
-
+# Upload every State Profile Report
 for i in profile_reports:
   try:
     utils.upload_state_report(i['id'], i['name'], domain, socrata_py_client, sodapy_client, SOCRATA_ID, SOCRATA_PASS)
+  except:
+    pass
+
+# Approve every State Profile Report
+for i in profile_reports:
+  try:
+    utils.auto_approve(domain, i['id'], i['name'], SOCRATA_ID, SOCRATA_PASS)
   except:
     pass

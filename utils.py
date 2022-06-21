@@ -46,7 +46,7 @@ def upload_state_report(dataset_id, state, domain, socrata_py_client, sodapy_cli
 
     revision = view.revisions.create_replace_revision()
 
-    current_date = (date.today() - timedelta(4)).strftime("%Y%m%d")
+    current_date = (date.today() - timedelta(5)).strftime("%Y%m%d")
 
     filepath = f'input/{state}_State_Profile_Report_{current_date}_Public.pdf' 
 
@@ -58,7 +58,7 @@ def upload_state_report(dataset_id, state, domain, socrata_py_client, sodapy_cli
         )
         response = sodapy_client.replace_non_data_file(dataset_id, {}, files)
     
-    last_update =  (date.today() - timedelta(4)).strftime("%b %d, %Y")
+    last_update =  (date.today() - timedelta(5)).strftime("%b %d, %Y")
     payload = {"customFields": {"Common Core": {"Last Update" : last_update}}}
     json_data = json.dumps(payload)
     req_update = requests.patch(meta_url, json_data, auth=(SOCRATA_ID, SOCRATA_PASS))
@@ -70,3 +70,31 @@ def upload_state_report(dataset_id, state, domain, socrata_py_client, sodapy_cli
     attachment_update = add_attachment(revision, filepath, filename) 
     job = attachment_update.apply()
     job.wait_for_finish(progress=lambda job: print(state, 'attachment upload: ', job.attributes['status']))   
+
+############################################################################
+# Define function to approve an asset in the approvals queue
+
+def auto_approve(domain, fxf, state, user_id, user_pw):
+    import os
+    import requests
+    import json
+
+    rev = requests.get(url = f"https://{domain}/api/publishing/v1/revision/{fxf}", auth = (user_id, user_pw))
+    if rev.status_code != 200:
+        return rev.content
+  
+    rev_seq = str(json.loads(rev.content)[0]['resource']['revision_seq'])
+    qu = requests.get(url = f"https://{domain}/views/{fxf}/approvals?method=guidance&assetId={fxf}:{rev_seq}",  auth = (user_id, user_pw))
+    if qu.status_code != 200:
+        return qu.content
+    if json.loads(qu.content)['currentState'] != "pending":
+        return {"Warning": f"No draft waiting for approval; no action taken for {state} SPR"}
+  
+    updateURL = json.loads(qu.content)['updateUrl']
+    approval = requests.put(
+        url = f"https://{domain}{updateURL}", json = {"state": "approved"}, auth = (user_id, user_pw))
+    if approval.status_code != 200:
+        return f"{state} SPR Warning: " + approval.content['Warning']
+    else:
+        print(f"Success: {state} State Profile Report approved", flush=True)
+        return json.loads(approval.content)
